@@ -89,6 +89,7 @@ impl User {
         let user = Self { name, age };
         
         // Trigger your event here
+        // note: whatever data comes in here can be sent asynchronously to any resource, like a database
         println!("Trigger: A new user named {} was created!", user.name);
         
         user
@@ -148,6 +149,7 @@ fn main() {
     
     // Uses the `move` keyword to take ownership of `data`
     let consume_data = move || {
+        // note: whatever data comes in here can be sent asynchronously to any resource, like a database
         let _len = data.len();
         println!("Consumed data!");
     };
