@@ -815,4 +815,78 @@ fn main() {
 }
 ```
 
+## Using `Arc` with `Mutex` - Real-World Code Example
+
+```
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
+
+// The data structure we want to share and mutate across threads
+#[derive(Debug)]
+struct JobStatus {
+    progress: u32,
+    state: &'static str,
+}
+
+fn main() {
+    // 1. Initialize the tracker wrapped in a Mutex, then an Arc
+    let job_tracker: Arc<Mutex<HashMap<String, JobStatus>>> = Arc::new(Mutex::new(HashMap::new()));
+
+    let mut thread_handles = vec![];
+
+    // 2. Spawn 3 background worker threads
+    for i in 1..=3 {
+        // Clone the Arc pointer for the new thread (increases reference count)
+        let tracker_clone = Arc::clone(&job_tracker);
+        let job_id = format!("job_{}", i);
+
+        let handle = thread::spawn(move || {
+            // Initialize the job status in the map
+            {
+                // lock() blocks until this thread exclusively owns the data
+                let mut map = tracker_clone.lock().unwrap();
+                map.insert(job_id.clone(), JobStatus { progress: 0, state: "Pending" });
+                // The lock is released here automatically when `map` goes out of scope
+            }
+
+            // Simulate background work increments
+            for step in 1..=5 {
+                thread::sleep(Duration::from_millis(100)); // Simulate time-consuming work
+                
+                // Acquire the lock to update progress
+                let mut map = tracker_clone.lock().unwrap();
+                if let Some(job) = map.get_mut(&job_id) {
+                    job.progress = step * 20;
+                    job.state = if step == 5 { "Completed" } else { "Running" };
+                }
+            }
+        });
+
+        thread_handles.push(handle);
+    }
+
+    // 3. Simultaneously, simulate the main thread acts like an API reading the status
+    for _ in 0..3 {
+        thread::sleep(Duration::from_millis(150));
+        
+        // Acquire lock just to read the current state
+        let map = job_tracker.lock().unwrap();
+        println!("--- Live API Snapshot ---");
+        for (id, status) in map.iter() {
+            println!("{}: {}% ({})", id, status.progress, status.state);
+        }
+    }
+
+    // 4. Ensure all worker threads complete their execution cleanly
+    for handle in thread_handles {
+        handle.join().unwrap();
+    }
+
+    // Print final report
+    println!("\nFinal State: {:?}", job_tracker.lock().unwrap());
+}
+```
+
 ## .
