@@ -1,6 +1,19 @@
 # rust-snippets
-Rust Snippets
+
+`Rust` Snippets - A collection of `Rust` programs and some very brief docs.
+
+## Acknowledgment
+
+My sincere thanks to `Google` for making `information` easily available to the masses and for open-sourcing many software.
+
+And, of course, to the `Rust Community`
+
+## As of 2026-08-17 ...
+
+With the advent of AI-assisted `coding`, now it is all about `creativity` and `imagination` in gathering and presenting code and paving the way for `hierarchical and/or chained AI` systems.
+
 ## Writing to (stdout, stderr, file) and then reading from file
+
 ```
 use std::fs;
 
@@ -27,7 +40,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
   Ok(())
 }
 ```
+
 ## Capturing Environment Variable
+
 ```
 use std::env;
 
@@ -47,7 +62,9 @@ fn main() {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
 }
 ```
+
 ## Capturing command-line args
+
 ```
 use std::env;
 
@@ -67,7 +84,9 @@ fn main() {
     }
 }
 ```
+
 ## A Simple Trigger
+
 ```
 pub struct User {
     name: String,
@@ -80,14 +99,16 @@ impl User {
         let user = Self { name, age };
         
         // Trigger your event here
-        // note: whatever data comes in here can be sent asynchronously to any resource, like a database
+        // `Note`: whatever data comes in here can be sent asynchronously to any resource, like a (distributed) database/datastore/storage-system or a (distributed) messaging system.
         println!("Trigger: A new user named {} was created!", user.name);
         
         user
     }
 }
 ```
+
 ## A Simple Closure
+
 ```
 fn main() {
     // A simple closure that adds one to a number
@@ -96,8 +117,11 @@ fn main() {
     println!("{}", result);
 }
 ```
+
 ## Capturing the Environment
+
 ### Fn (Immutable Borrow)
+
 ```
 fn main() {
     let name = "Rust";
@@ -109,7 +133,9 @@ fn main() {
     print_name(); // Can call again because `name` is still valid
 }
 ```
+
 ### FnMut (Mutable Borrow)
+
 ```
 fn main() {
     let mut count = 0;
@@ -124,7 +150,9 @@ fn main() {
     increment(); // Count: 2
 }
 ```
+
 ### FnOnce (Take Ownership)
+
 ```
 fn main() {
     let data = vec![1, 2, 3];
@@ -141,7 +169,9 @@ fn main() {
     // println!("{:?}", data); // Error! `data` was moved into the closure.
 }
 ```
+
 ## Create File if Not Found
+
 ```
 use std::fs::File;
 use std::io::{self, ErrorKind};
@@ -160,7 +190,9 @@ fn main() {
     let _file = get_or_create_file("output.txt").unwrap();
 }
 ```
+
 ## Concatenate strings
+
 ```
 use std::error::Error;
 
@@ -170,7 +202,9 @@ fn main() -> Result<(), Box<dyn Error>> {
   Ok(())
 }
 ```
+
 ## Spawn a thread
+
 ```
 use std::thread;
 
@@ -184,7 +218,9 @@ fn main() {
     handle.join().unwrap();
 }
 ```
+
 ## How to use Box
+
 ```
 use std::error::Error;
 use std::fmt;
@@ -211,7 +247,9 @@ fn main() {
   }
 }
 ```
+
 ## The idiomatic way of accepting both &str and String
+
 ```
 // This function accepts both &str and String seamlessly
 fn route_any_text<T: AsRef<str>>(param: T) {
@@ -228,7 +266,9 @@ fn main() {
     route_any_text(my_string);
 }
 ```
+
 ## True Routing (Distinct Behavior for &str and String)
+
 ```
 // 1. Define a routing trait
 trait TextRouter {
@@ -265,7 +305,9 @@ fn main() {
     process_route(owned);    
 }
 ```
+
 ## Checking type information
+
 ```
 use std::any::type_name;
 
@@ -291,7 +333,9 @@ fn main() {
     println!("{}", type_of(the_struct)); // ...::main::S
 }
 ```
+
 ## Calling C Functions from Rust
+
 ```
 // Declare the external C library function
 extern "C" {
@@ -304,7 +348,9 @@ fn main() {
     println!("Absolute value from C: {}", result);
 }
 ```
+
 ## Spawn a binary
+
 ```
 use std::process::Command;
 
@@ -323,8 +369,11 @@ fn main() {
     println!("Process finished with: {}", status);
 }
 ```
+
 ## Without panicking, just show the error message
+
 ### Using `match`
+
 ```
 let res: Result<i32, &str> = Err("file not found");
 
@@ -333,7 +382,9 @@ match res {
     Err(e) => println!("Error: {}", e), // Shows the err message safely
 }
 ```
+
 ### Using `if let`
+
 ```
 let res: Result<i32, &str> = Err("bad input");
 
@@ -341,7 +392,9 @@ if let Err(e) = res {
     println!("Error: {}", e);
 }
 ```
+
 ## Mapping over an Iterator
+
 ```
 fn main() {
     let numbers = vec![1, 2, 3];
@@ -355,7 +408,9 @@ fn main() {
     println!("{:?}", doubled); // Output: [2, 4, 6]
 }
 ```
+
 ## Mapping over an Option
+
 ```
 fn main() {
     let maybe_number: Option<i32> = Some(5);
@@ -369,7 +424,9 @@ fn main() {
     println!("{:?}", empty.map(|x| x * 2)); // Output: None (no panic!)
 }
 ```
+
 ## Filtering an Iterator
+
 ```
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5, 6];
@@ -384,7 +441,9 @@ fn main() {
     println!("{:?}", evens); // Output: [2, 4, 6]
 }
 ```
+
 ## Combining .filter and .map
+
 ```
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5, 6];
@@ -398,7 +457,9 @@ fn main() {
     println!("{:?}", doubled_evens); // Output: [4, 8, 12]
 }
 ```
+
 ## Vector and Array Sum
+
 ```
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5];
@@ -409,7 +470,9 @@ fn main() {
     println!("Sum is: {}", total); // Sum is: 15
 }
 ```
+
 ## Range Sum with Type Hint
+
 ```
 fn main() {
     // Using turbofish syntax to specify the output type
@@ -418,7 +481,9 @@ fn main() {
     println!("Sum of range: {}", sum); // Sum of range: 15
 }
 ```
+
 ## Using turbofish syntax (::<...>)
+
 ```
 fn main() {
     // 1. Parsing a string into an integer
@@ -433,21 +498,28 @@ fn main() {
     println!("Animal list: {:?}", animal_list);
 }
 ```
+
 ## Type Annotations
+
 ### Basic Syntax
+
 ```
 let score: i32 = 100;                 // 32-bit signed integer
 let pi: f64 = 3.14159;                // 64-bit floating point
 let is_active: bool = true;           // Boolean
 let greeting: &str = "Hello, Rust!";  // String slice
 ```
+
 ### Mandatory in Function Signatures
+
 ```
 fn add_numbers(x: i32, y: i32) -> i32 {
     x + y // Return type is annotated after the '->'
 }
 ```
+
 ### Mandatory in Struct and Enum Definitions
+
 ```
 struct User {
     username: String,
@@ -455,28 +527,39 @@ struct User {
     is_active: bool,
 }
 ```
+
 ### Constants and Statics
+
 ```
 const MAX_POINTS: u32 = 100_000;
 ```
+
 ## About `static`
+
 In Rust, the word static is used for three main things: declaring global variables with fixed memory locations, specifying a lifetime where data lives for the entire program, and defining trait bounds to ensure types do not contain temporary borrowed references.
+
 ## Built-In Iterator Methods
+
 ### Transforming Adapters
+
   1. .filter_map(): Runs a function that returns an Option, keeping only the Some values and unwrapping them at the same time.
   2. .enumerate(): Yields pairs of (index, element) as you loop through items.
   3. .take(n): Keeps only the first n items from the sequence.
   4. .skip(n): Bypasses the first n items and yields the rest.
   5. .zip(other): Blends two streams into pairs (a, b).
   6. .flatten(): Flattens nested collections (like a Vec<Vec<T>>) into a single level.
+     
 ### Consuming Methods
+
   1. .collect(): Gathers items back into a collection like a Vec or HashMap.
   2. .fold(init, f): Accumulates a single final value by carrying an intermediate state through a closure. Aka `reduce`
   3. .any(predicate): Returns true if any element matches the condition.
   4. .all(predicate): Returns true if every element matches the condition.
   5. .find(predicate): Returns the first item that matches the condition as an Option.
   6. .count(): Counts how many items are left in the iterator.
+     
 ## Using Iterator::fold
+
 ```
 fn main() {
     // 1. Summing a list of numbers
@@ -502,7 +585,9 @@ fn main() {
     println!("{}", sentence); // Output: Rust is fast and safe
 }
 ```
+
 ## Reading from `stdin`
+
 ```
 use std::io;
 
@@ -519,4 +604,5 @@ fn main() {
     println!("You typed: {}", input.trim()); 
 }
 ```
+
 ## .
