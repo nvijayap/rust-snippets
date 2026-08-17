@@ -433,3 +433,46 @@ fn main() {
     println!("Animal list: {:?}", animal_list);
 }
 ```
+## Type Annotations
+### Basic Syntax
+```
+let score: i32 = 100;                 // 32-bit signed integer
+let pi: f64 = 3.14159;                // 64-bit floating point
+let is_active: bool = true;           // Boolean
+let greeting: &str = "Hello, Rust!";  // String slice
+```
+### Mandatory in Function Signatures
+```
+fn add_numbers(x: i32, y: i32) -> i32 {
+    x + y // Return type is annotated after the '->'
+}
+```
+### Mandatory in Struct and Enum Definitions
+```
+struct User {
+    username: String,
+    login_count: u64,
+    is_active: bool,
+}
+```
+### Constants and Statics
+```
+const MAX_POINTS: u32 = 100_000;
+```
+## About `static`
+In Rust, the word static is used for three main things: declaring global variables with fixed memory locations, specifying a lifetime where data lives for the entire program, and defining trait bounds to ensure types do not contain temporary borrowed references.
+## Built-In Iterator Methods
+### Transforming Adapters
+  1. .filter_map(): Runs a function that returns an Option, keeping only the Some values and unwrapping them at the same time.
+  2. .enumerate(): Yields pairs of (index, element) as you loop through items.
+  3. .take(n): Keeps only the first n items from the sequence.
+  4. .skip(n): Bypasses the first n items and yields the rest.
+  5. .zip(other): Blends two streams into pairs (a, b).
+  6. .flatten(): Flattens nested collections (like a Vec<Vec<T>>) into a single level.
+### Consuming Methods
+  1. .collect(): Gathers items back into a collection like a Vec or HashMap.
+  2. .fold(init, f): Accumulates a single final value by carrying an intermediate state through a closure. Aka `reduce`
+  3. .any(predicate): Returns true if any element matches the condition.
+  4. .all(predicate): Returns true if every element matches the condition.
+  5. .find(predicate): Returns the first item that matches the condition as an Option.
+  6. .count(): Counts how many items are left in the iterator.
