@@ -302,22 +302,6 @@ fn type_of<T>(_: T) -> &'static str {
 }
 
 fn main() {
-    let x = 21; // Integer
-    let y = 2.5; // Float
-    println!("Type of x: {}", type_of(x)); // yields i32
-    println!("Type of y: {}", type_of(y)); // yields f64
-}
-```
-
-### 
-```
-use std::any::type_name;
-
-fn type_of<T>(_: T) -> &'static str {
-    type_name::<T>()
-}
-
-fn main() {
     let a = 21; // Integer
     println!("{}", type_of(a)); // i32
 
