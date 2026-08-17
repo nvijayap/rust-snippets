@@ -626,7 +626,10 @@ fn main() {
 
 ```
 In Rust, `Rc` stands for `Reference Counted`. 
-It is a smart pointer type (Rc<T>) that enables multiple parts of your program to share ownership of the same data on the heap within a single thread. 
+
+It is a smart pointer type (Rc<T>) that enables multiple parts of your program to
+share ownership of the same data on the heap within a single thread. 
+
 It tracks how many owners exist and deletes the data when that count hits zero.
 ```
 
@@ -637,7 +640,8 @@ In Rust, `Arc` stands for `Atomically Reference Counted`.
 It is a thread-safe smart pointer that enables shared ownership of a value allocated on the heap.
 
 Normally, Rust's strict ownership model dictates that a value can only have one owner at a time. 
-Arc bypasses this restriction safely in `multithreaded` environments by tracking how many references to the data exist.
+Arc bypasses this restriction safely in `multithreaded` environments by tracking
+how many references to the data exist.
 ```
 
 ## Cow
@@ -645,7 +649,17 @@ Arc bypasses this restriction safely in `multithreaded` environments by tracking
 ```
 In Rust, Cow stands for Clone-on-Write (found in std::borrow::Cow).
 It is a smart pointer that acts like a wrapper for data.
-It lets you handle situations where data might be borrowed or owned, and it only clones (copies) the data into a new, owned memory block if you actually try to change it.
+
+It lets you handle situations where data might be borrowed or owned, and it only clones (copies)
+the data into a new, owned memory block if you actually try to change it.
+```
+
+## why does thread::spawn use move
+
+```
+Rust's std::thread::spawn uses the move keyword because new threads can outlive the current function.
+A move closure takes full ownership of variables it captures from outside,
+preventing dangling references if the parent function finishes before the spawned thread.
 ```
 
 ## .
