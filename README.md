@@ -159,3 +159,23 @@ fn main() {
     // println!("{:?}", data); // Error! `data` was moved into the closure.
 }
 ```
+
+### Create File if Not Found
+```
+use std::fs::File;
+use std::io::{self, ErrorKind};
+
+fn get_or_create_file(path: &str) -> io::Result<File> {
+    match File::open(path) {
+        Ok(file) => Ok(file),
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => File::create(path),
+            _ => Err(error), // Return any other error (e.g. permissions)
+        },
+    }
+}
+
+fn main() {
+    let _file = get_or_create_file("output.txt").unwrap();
+}
+```
