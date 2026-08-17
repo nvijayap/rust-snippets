@@ -398,4 +398,14 @@ fn main() {
     println!("{:?}", doubled_evens); // Output: [4, 8, 12]
 }
 ```
-#
+## Vector and Array Sum
+```
+fn main() {
+    let numbers = vec![1, 2, 3, 4, 5];
+    
+    // Using .sum() on an iterator
+    let total: i32 = numbers.iter().sum();
+    
+    println!("Sum is: {}", total); // Sum is: 15
+}
+```
