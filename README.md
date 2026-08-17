@@ -418,3 +418,18 @@ fn main() {
     println!("Sum of range: {}", sum); // Sum of range: 15
 }
 ```
+## Using turbofish syntax (::<...>)
+```
+fn main() {
+    // 1. Parsing a string into an integer
+    // Without turbofish, Rust doesn't know if you want a u32, i32, or f64
+    let number = "42".parse::<i32>().unwrap();
+    println!("Parsed number: {}", number);
+
+    // 2. Collecting a iterator into a specific collection
+    // Tells the compiler to group these numbers into a Vector
+    let micro_animals = vec!["tardigrade", "nematode"];
+    let animal_list = micro_animals.iter().collect::<Vec<&&str>>();
+    println!("Animal list: {:?}", animal_list);
+}
+```
