@@ -622,4 +622,18 @@ fn main() {
 }
 ```
 
+### Rc
+
+In Rust, `Rc` stands for `Reference Counted`. 
+It is a smart pointer type (Rc<T>) that enables multiple parts of your program to share ownership of the same data on the heap within a single thread. 
+It tracks how many owners exist and deletes the data when that count hits zero.
+
+## Arc
+
+In Rust, `Arc` stands for `Atomically Reference Counted`. 
+It is a thread-safe smart pointer that enables shared ownership of a value allocated on the heap.
+
+Normally, Rust's strict ownership model dictates that a value can only have one owner at a time. 
+Arc bypasses this restriction safely in `multithreaded` environments by tracking how many references to the data exist.
+
 ## .
