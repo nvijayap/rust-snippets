@@ -185,11 +185,23 @@ fn main() {
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-
   let concatenated_string = format!("{} {} {}", "so", "be", "it");
-
   println!("concatenated_string: {concatenated_string}");
-
   Ok(())
+}
+```
+
+### Spawn a thread
+```
+use std::thread;
+
+fn main() {
+    // Spawn a new thread
+    let handle = thread::spawn(|| {
+        println!("Hello from the spawned thread!");
+    });
+
+    // Wait for the thread to finish executing
+    handle.join().unwrap();
 }
 ```
