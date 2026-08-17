@@ -377,7 +377,7 @@ if let Err(e) = res {
 }
 ```
 
-## Mapping over an iterator
+## Mapping over an Iterator
 ```
 fn main() {
     let numbers = vec![1, 2, 3];
@@ -389,5 +389,20 @@ fn main() {
         .collect();
 
     println!("{:?}", doubled); // Output: [2, 4, 6]
+}
+```
+
+## Mapping over an Option
+```
+fn main() {
+    let maybe_number: Option<i32> = Some(5);
+    
+    // Transforms the value inside Some, or safely returns None
+    let doubled_option = maybe_number.map(|x| x * 2);
+
+    println!("{:?}", doubled_option); // Output: Some(10)
+    
+    let empty: Option<i32> = None;
+    println!("{:?}", empty.map(|x| x * 2)); // Output: None (no panic!)
 }
 ```
