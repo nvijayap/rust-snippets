@@ -391,7 +391,6 @@ fn main() {
     println!("{:?}", doubled); // Output: [2, 4, 6]
 }
 ```
-
 ## Mapping over an Option
 ```
 fn main() {
@@ -406,3 +405,19 @@ fn main() {
     println!("{:?}", empty.map(|x| x * 2)); // Output: None (no panic!)
 }
 ```
+## Filtering an Iterator
+```
+fn main() {
+    let numbers = vec![1, 2, 3, 4, 5, 6];
+
+    // .filter() takes a reference to the item (&&x)
+    // We dereference it (*x) to check the value
+    let evens: Vec<i32> = numbers
+        .into_iter()
+        .filter(|x| x % 2 == 0)
+        .collect();
+
+    println!("{:?}", evens); // Output: [2, 4, 6]
+}
+```
+#
