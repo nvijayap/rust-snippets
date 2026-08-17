@@ -409,3 +409,12 @@ fn main() {
     println!("Sum is: {}", total); // Sum is: 15
 }
 ```
+## Range Sum with Type Hint
+```
+fn main() {
+    // Using turbofish syntax to specify the output type
+    let sum: u32 = (1..=5).sum();
+    
+    println!("Sum of range: {}", sum); // Sum of range: 15
+}
+```
