@@ -160,7 +160,7 @@ fn main() {
 }
 ```
 
-### Create File if Not Found
+## Create File if Not Found
 ```
 use std::fs::File;
 use std::io::{self, ErrorKind};
@@ -180,7 +180,7 @@ fn main() {
 }
 ```
 
-### Concatenate strings
+## Concatenate strings
 ```
 use std::error::Error;
 
@@ -191,7 +191,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-### Spawn a thread
+## Spawn a thread
 ```
 use std::thread;
 
@@ -206,7 +206,7 @@ fn main() {
 }
 ```
 
-### How to use Box
+## How to use Box
 ```
 use std::error::Error;
 use std::fmt;
@@ -234,7 +234,7 @@ fn main() {
 }
 ```
 
-### The idiomatic way of accepting both &str and String
+## The idiomatic way of accepting both &str and String
 
 ```
 // This function accepts both &str and String seamlessly
@@ -253,7 +253,7 @@ fn main() {
 }
 ```
 
-### True Routing (Distinct Behavior for &str and String)
+## True Routing (Distinct Behavior for &str and String)
 
 ```
 // 1. Define a routing trait
@@ -292,7 +292,7 @@ fn main() {
 }
 ```
 
-### Checking type information
+## Checking type information
 
 ```
 use std::any::type_name;
@@ -317,5 +317,19 @@ fn main() {
     struct S;
     let the_struct = S;
     println!("{}", type_of(the_struct)); // ...::main::S
+}
+```
+
+## Calling C Functions from Rust
+```
+// Declare the external C library function
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+fn main() {
+    // Calling the FFI function requires an unsafe block
+    let result = unsafe { abs(-42) };
+    println!("Absolute value from C: {}", result);
 }
 ```
