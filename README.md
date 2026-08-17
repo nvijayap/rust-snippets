@@ -698,4 +698,195 @@ fn main() {
 }
 ```
 
+To overcome a value move in Rust, you can use borrowing (& or &mut), implement the Copy trait, explicitly clone the data, or use shared ownership smart pointers like Rc or Arc.
+
+## Borrowing with References
+
+Instead of transferring ownership, pass a reference so the original variable remains valid and usable.
+
+```
+fn print_text(s: &String) {
+    println!("{}", s);
+}
+
+fn main() {
+    let s1 = String::from("hello");
+    print_text(&s1); // Borrowing s1 instead of moving it
+    println!("{}", s1); // Still valid here!
+}
+```
+
+Behind the scenes in Rust, borrowing is a compile-time check with zero cost at runtime. The compiler uses a system called the borrow checker and lifetimes to track how long references are valid. This prevents data races and crashes before your code ever runs.
+
+## Implementing or using `copy`
+
+Types that have fixed size stored on the stack (like numbers) implement the Copy trait. Instead of moving, Rust automatically copies them. You can derive Copy for simple custom structs.
+
+```
+#[derive(Clone, Copy)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p1 = Point { x: 1, y: 2 };
+    let p2 = p1; // Copied, not moved!
+    println!("p1 is still valid: {}", p1.x);
+}
+```
+
+## Cloning the data
+
+If you need absolute ownership of a new variable and cannot share references, create a complete duplicate using .clone().
+
+```
+fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1.clone(); // Deep copy of the heap data
+    println!("s1: {}, s2: {}", s1, s2); // Both are valid
+}
+```
+
+## Shared ownership (Rc/Arc)
+
+When multiple parts of your program need joint ownership of data, wrap it in a Reference Counted smart pointer (Rc for single-threaded, Arc for multi-threaded).
+
+```
+use std::rc::Rc;
+
+fn main() {
+    let s1 = Rc::new(String::from("hello"));
+    let s2 = Rc::clone(&s1); // Increments reference count
+    
+    println!("Strong count: {}", Rc::strong_count(&s1));
+}
+```
+
+## Using `Arc` - Real-World Code Example
+
+```
+use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
+
+// Shared configuration for our application
+struct AppConfig {
+    app_name: String,
+    timeout_seconds: u64,
+}
+
+fn main() {
+    // Wrap the config in an Arc so it can be safely shared across threads
+    let config = Arc::new(AppConfig {
+        app_name: String::from("FastServer"),
+        timeout_seconds: 5,
+    });
+
+    let mut handles = vec![];
+
+    // Spawn 3 worker threads
+    for i in 1..=3 {
+        // Clone the Arc pointer for this thread
+        // This increments the reference count atomically, not the underlying data
+        let config_clone = Arc::clone(&config);
+
+        let handle = thread::spawn(move || {
+            // Access shared data safely from the new thread
+            println!(
+                "Worker {} started for {}. Timeout is {}s.",
+                i, config_clone.app_name, config_clone.timeout_seconds
+            );
+            
+            thread::sleep(Duration::from_millis(100));
+            
+            println!("Worker {} finished.", i);
+        });
+
+        handles.push(handle);
+    }
+
+    // Wait for all worker threads to finish
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("All workers done. Program exiting.");
+}
+```
+
+## Using `Arc` with `Mutex` - Real-World Code Example
+
+```
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
+
+// The data structure we want to share and mutate across threads
+#[derive(Debug)]
+struct JobStatus {
+    progress: u32,
+    state: &'static str,
+}
+
+fn main() {
+    // 1. Initialize the tracker wrapped in a Mutex, then an Arc
+    let job_tracker: Arc<Mutex<HashMap<String, JobStatus>>> = Arc::new(Mutex::new(HashMap::new()));
+
+    let mut thread_handles = vec![];
+
+    // 2. Spawn 3 background worker threads
+    for i in 1..=3 {
+        // Clone the Arc pointer for the new thread (increases reference count)
+        let tracker_clone = Arc::clone(&job_tracker);
+        let job_id = format!("job_{}", i);
+
+        let handle = thread::spawn(move || {
+            // Initialize the job status in the map
+            {
+                // lock() blocks until this thread exclusively owns the data
+                let mut map = tracker_clone.lock().unwrap();
+                map.insert(job_id.clone(), JobStatus { progress: 0, state: "Pending" });
+                // The lock is released here automatically when `map` goes out of scope
+            }
+
+            // Simulate background work increments
+            for step in 1..=5 {
+                thread::sleep(Duration::from_millis(100)); // Simulate time-consuming work
+                
+                // Acquire the lock to update progress
+                let mut map = tracker_clone.lock().unwrap();
+                if let Some(job) = map.get_mut(&job_id) {
+                    job.progress = step * 20;
+                    job.state = if step == 5 { "Completed" } else { "Running" };
+                }
+            }
+        });
+
+        thread_handles.push(handle);
+    }
+
+    // 3. Simultaneously, simulate the main thread acts like an API reading the status
+    for _ in 0..3 {
+        thread::sleep(Duration::from_millis(150));
+        
+        // Acquire lock just to read the current state
+        let map = job_tracker.lock().unwrap();
+        println!("--- Live API Snapshot ---");
+        for (id, status) in map.iter() {
+            println!("{}: {}% ({})", id, status.progress, status.state);
+        }
+    }
+
+    // 4. Ensure all worker threads complete their execution cleanly
+    for handle in thread_handles {
+        handle.join().unwrap();
+    }
+
+    // Print final report
+    println!("\nFinal State: {:?}", job_tracker.lock().unwrap());
+}
+```
+
 ## .
