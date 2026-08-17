@@ -376,3 +376,18 @@ if let Err(e) = res {
     println!("Error: {}", e);
 }
 ```
+
+## Mapping over an iterator
+```
+fn main() {
+    let numbers = vec![1, 2, 3];
+
+    // .map() is safe and lazy; it transforms elements one by one
+    let doubled: Vec<i32> = numbers
+        .iter()
+        .map(|x| x * 2)
+        .collect();
+
+    println!("{:?}", doubled); // Output: [2, 4, 6]
+}
+```
