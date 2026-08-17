@@ -679,4 +679,23 @@ fn main() {
 }
 ```
 
+## Arithmetic Progression (AP)
+
+An arithmetic progression (AP) is a sequence where the difference between consecutive terms is constant. In Rust, you can generate an AP using standard iterators, calculate the n-th term, or check if a sequence forms an AP using basic loops or specialized crates like use-series.
+
+### Generating an AP Using Iterators
+
+```
+fn generate_ap(first: i32, diff: i32, count: usize) -> Vec<i32> {
+    std::iter::successors(Some(first), move |&prev| Some(prev + diff))
+        .take(count)
+        .collect()
+}
+
+fn main() {
+    let ap = generate_ap(2, 3, 5); // Starts at 2, step 3, 5 elements
+    println!("{:?}", ap); // Output: [2, 5, 8, 11, 14]
+}
+```
+
 ## .
