@@ -333,3 +333,23 @@ fn main() {
     println!("Absolute value from C: {}", result);
 }
 ```
+
+## Spawn a binary
+```
+use std::process::Command;
+
+fn main() {
+    // Spawn the binary
+    let mut child = Command::new("mkdir")
+        .arg("-p")
+        .arg("/tmp/a")
+        .spawn()
+        .expect("failed to execute process");
+
+    // Do other work while the child process runs...
+
+    // Wait for the child process to finish and get its status
+    let status = child.wait().expect("failed to wait on child");
+    println!("Process finished with: {}", status);
+}
+```
