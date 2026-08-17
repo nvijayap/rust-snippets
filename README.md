@@ -502,4 +502,21 @@ fn main() {
     println!("{}", sentence); // Output: Rust is fast and safe
 }
 ```
+## Reading from `stdin`
+```
+use std::io;
+
+fn main() {
+    println!("Please enter some text:");
+    
+    let mut input = String::new();
+    
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line"); // Handles potential I/O errors
+
+    // Note: read_line includes the trailing newline character '\n'
+    println!("You typed: {}", input.trim()); 
+}
+```
 ## .
