@@ -476,3 +476,30 @@ In Rust, the word static is used for three main things: declaring global variabl
   4. .all(predicate): Returns true if every element matches the condition.
   5. .find(predicate): Returns the first item that matches the condition as an Option.
   6. .count(): Counts how many items are left in the iterator.
+## Using Iterator::fold
+```
+fn main() {
+    // 1. Summing a list of numbers
+    let numbers = vec![1, 2, 3, 4, 5];
+    
+    let sum = numbers.iter().fold(0, |accumulator, &item| {
+        accumulator + item
+    });
+    
+    println!("The sum is: {}", sum); // Output: 15
+
+    // 2. Building a string from a vector of words
+    let words = vec!["Rust", "is", "fast", "and", "safe"];
+    
+    let sentence = words.iter().fold(String::new(), |mut acc, &word| {
+        if !acc.is_empty() {
+            acc.push(' ');
+        }
+        acc.push_str(word);
+        acc
+    });
+    
+    println!("{}", sentence); // Output: Rust is fast and safe
+}
+```
+## .
