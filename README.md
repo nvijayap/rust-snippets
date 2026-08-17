@@ -605,4 +605,21 @@ fn main() {
 }
 ```
 
+## exec
+
+```
+use std::process::Command;
+use std::os::unix::process::CommandExt;
+
+fn main() {
+    // This will completely replace your program with "echo"
+    let error = Command::new("echo")
+        .arg("Hello from the other side!")
+        .exec();
+
+    // This line only runs if exec fails (e.g., command not found)
+    println!("Error running exec: {}", error);
+}
+```
+
 ## .
