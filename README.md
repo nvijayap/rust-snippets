@@ -1,9 +1,6 @@
 # rust-snippets
-
 Rust Snippets
-
 ## Writing to (stdout, stderr, file) and then reading from file
-
 ```
 use std::fs;
 
@@ -30,9 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
   Ok(())
 }
 ```
-
 ## Capturing Environment Variable
-
 ```
 use std::env;
 
@@ -52,9 +47,7 @@ fn main() {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
 }
 ```
-
 ## Capturing command-line args
-
 ```
 use std::env;
 
@@ -74,9 +67,7 @@ fn main() {
     }
 }
 ```
-
 ## A Simple Trigger
-
 ```
 pub struct User {
     name: String,
@@ -96,9 +87,7 @@ impl User {
     }
 }
 ```
-
 ## A Simple Closure
-
 ```
 fn main() {
     // A simple closure that adds one to a number
@@ -107,11 +96,8 @@ fn main() {
     println!("{}", result);
 }
 ```
-
 ## Capturing the Environment
-
 ### Fn (Immutable Borrow)
-
 ```
 fn main() {
     let name = "Rust";
@@ -123,9 +109,7 @@ fn main() {
     print_name(); // Can call again because `name` is still valid
 }
 ```
-
 ### FnMut (Mutable Borrow)
-
 ```
 fn main() {
     let mut count = 0;
@@ -140,9 +124,7 @@ fn main() {
     increment(); // Count: 2
 }
 ```
-
 ### FnOnce (Take Ownership)
-
 ```
 fn main() {
     let data = vec![1, 2, 3];
@@ -159,7 +141,6 @@ fn main() {
     // println!("{:?}", data); // Error! `data` was moved into the closure.
 }
 ```
-
 ## Create File if Not Found
 ```
 use std::fs::File;
@@ -179,7 +160,6 @@ fn main() {
     let _file = get_or_create_file("output.txt").unwrap();
 }
 ```
-
 ## Concatenate strings
 ```
 use std::error::Error;
@@ -190,7 +170,6 @@ fn main() -> Result<(), Box<dyn Error>> {
   Ok(())
 }
 ```
-
 ## Spawn a thread
 ```
 use std::thread;
@@ -205,7 +184,6 @@ fn main() {
     handle.join().unwrap();
 }
 ```
-
 ## How to use Box
 ```
 use std::error::Error;
@@ -233,9 +211,7 @@ fn main() {
   }
 }
 ```
-
 ## The idiomatic way of accepting both &str and String
-
 ```
 // This function accepts both &str and String seamlessly
 fn route_any_text<T: AsRef<str>>(param: T) {
@@ -252,9 +228,7 @@ fn main() {
     route_any_text(my_string);
 }
 ```
-
 ## True Routing (Distinct Behavior for &str and String)
-
 ```
 // 1. Define a routing trait
 trait TextRouter {
@@ -291,9 +265,7 @@ fn main() {
     process_route(owned);    
 }
 ```
-
 ## Checking type information
-
 ```
 use std::any::type_name;
 
@@ -319,7 +291,6 @@ fn main() {
     println!("{}", type_of(the_struct)); // ...::main::S
 }
 ```
-
 ## Calling C Functions from Rust
 ```
 // Declare the external C library function
@@ -333,7 +304,6 @@ fn main() {
     println!("Absolute value from C: {}", result);
 }
 ```
-
 ## Spawn a binary
 ```
 use std::process::Command;
@@ -353,11 +323,8 @@ fn main() {
     println!("Process finished with: {}", status);
 }
 ```
-
 ## Without panicking, just show the error message
-
 ### Using `match`
-
 ```
 let res: Result<i32, &str> = Err("file not found");
 
@@ -366,9 +333,7 @@ match res {
     Err(e) => println!("Error: {}", e), // Shows the err message safely
 }
 ```
-
 ### Using `if let`
-
 ```
 let res: Result<i32, &str> = Err("bad input");
 
@@ -376,7 +341,6 @@ if let Err(e) = res {
     println!("Error: {}", e);
 }
 ```
-
 ## Mapping over an Iterator
 ```
 fn main() {
@@ -418,6 +382,20 @@ fn main() {
         .collect();
 
     println!("{:?}", evens); // Output: [2, 4, 6]
+}
+```
+## Combining .filter and .map
+```
+fn main() {
+    let numbers = vec![1, 2, 3, 4, 5, 6];
+
+    let doubled_evens: Vec<i32> = numbers
+        .into_iter()
+        .filter(|x| x % 2 == 0) // Keeps: 2, 4, 6
+        .map(|x| x * 2)        // Becomes: 4, 8, 12
+        .collect();
+
+    println!("{:?}", doubled_evens); // Output: [4, 8, 12]
 }
 ```
 #
