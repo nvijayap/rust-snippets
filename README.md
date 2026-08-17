@@ -1,1 +1,159 @@
 # rust-snippets
+
+Rust Snippets
+
+## Writing to (stdout, stderr, file) and then reading from file
+
+```
+use std::fs;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+  // writes a string to stdout
+  println!("hello, rust universe!");
+
+  // writes as string to stderr
+  eprintln!("damn, encountered an error!");
+
+  // writes a string to a file
+  fs::write("out.txt", "just a line to go into out.txt\n")?;
+
+  // Reads the entire file into a String; propagates errors with '?'
+  let contents = fs::read_to_string("out.txt")?;
+  println!("{}", contents);
+
+  // will throw error if the file does not exist
+  let contents = fs::read_to_string("foo.txt")?;
+  println!("{}", contents);
+
+  // indicates success
+  Ok(())
+}
+```
+
+## Capturing Environment Variable
+
+```
+use std::env;
+
+fn main() {
+    let key = "DATABASE_URL";
+    
+    // 1. Basic reading (will panic if missing)
+    let db_url = env::var(key).unwrap();
+
+    // 2. Safe pattern matching for missing variables
+    match env::var(key) {
+        Ok(val) => println!("{key} is set to: {val}"),
+        Err(e) => println!("Could not read {key}: {e}"),
+    }
+
+    // 3. Providing a default value if missing
+    let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
+}
+```
+
+## Capturing command-line args
+
+```
+use std::env;
+
+fn main() {
+    // Collect all arguments into a Vector of Strings
+    let args: Vec<String> = env::args().collect();
+
+    // The first argument (index 0) is always the path to the executable
+    println!("Executable path: {}", args[0]);
+
+    // Check if the user passed actual arguments
+    if args.len() > 1 {
+        println!("First user argument: {}", args[1]);
+        println!("All user arguments: {:?}", &args[1..]);
+    } else {
+        println!("No user arguments provided.");
+    }
+}
+```
+
+## A Simple Trigger
+
+```
+pub struct User {
+    name: String,
+    age: u32,
+}
+
+impl User {
+    // This acts as your trigger
+    pub fn new(name: String, age: u32) -> Self {
+        let user = Self { name, age };
+        
+        // Trigger your event here
+        println!("Trigger: A new user named {} was created!", user.name);
+        
+        user
+    }
+}
+```
+
+## A Simple Closure
+
+```
+fn main() {
+    // A simple closure that adds one to a number
+    let add_one = |x: i32| x + 1;
+    let result = add_one(5); // Returns 6
+    println!("{}", result);
+}
+```
+
+## Capturing the Environment
+
+### Fn (Immutable Borrow)
+
+```
+fn main() {
+    let name = "Rust";
+    
+    // Captures `name` by immutable reference (&T)
+    let print_name = || println!("Hello, {}!", name);
+    
+    print_name();
+    print_name(); // Can call again because `name` is still valid
+}
+```
+
+### FnMut (Mutable Borrow)
+
+```
+fn main() {
+    let mut count = 0;
+    
+    // Captures `count` by mutable reference (&mut T)
+    let mut increment = || {
+        count += 1;
+        println!("Count: {}", count);
+    };
+    
+    increment(); // Count: 1
+    increment(); // Count: 2
+}
+```
+
+### FnOnce (Take Ownership)
+
+```
+fn main() {
+    let data = vec![1, 2, 3];
+    
+    // Uses the `move` keyword to take ownership of `data`
+    let consume_data = move || {
+        let _len = data.len();
+        println!("Consumed data!");
+    };
+    
+    consume_data();
+    // consume_data(); // Error! `consume_data` cannot be called twice.
+    // println!("{:?}", data); // Error! `data` was moved into the closure.
+}
+```
