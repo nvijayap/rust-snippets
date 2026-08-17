@@ -233,3 +233,22 @@ fn main() {
   }
 }
 ```
+
+### The idiomatic way of accepting both &str and String
+
+```
+// This function accepts both &str and String seamlessly
+fn route_any_text<T: AsRef<str>>(param: T) {
+    let text: &str = param.as_ref();
+    println!("Processing text: {}", text);
+}
+
+fn main() {
+    let my_str: &str = "hello";
+    let my_string: String = String::from("world");
+
+    // Both work perfectly
+    route_any_text(my_str);
+    route_any_text(my_string);
+}
+```
