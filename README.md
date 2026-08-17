@@ -205,3 +205,31 @@ fn main() {
     handle.join().unwrap();
 }
 ```
+
+### How to use Box
+```
+use std::error::Error;
+use std::fmt;
+
+#[derive(Debug)]
+struct MyError;
+
+impl fmt::Display for MyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "My custom error")
+    }
+}
+
+impl Error for MyError {}
+
+fn example_function() -> Result<(), Box<dyn Error>> {
+    Err(Box::new(MyError))
+}
+
+fn main() {
+  match example_function() {
+    Ok(r) => println!("{:?}", r),
+    Err(e) => println!("{e}"),
+  }
+}
+```
