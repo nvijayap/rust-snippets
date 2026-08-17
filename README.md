@@ -291,3 +291,20 @@ fn main() {
     process_route(owned);    
 }
 ```
+
+### Checking type information
+
+```
+use std::any::type_name;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
+
+fn main() {
+    let x = 21; // Integer
+    let y = 2.5; // Float
+    println!("Type of x: {}", type_of(x));
+    println!("Type of y: {}", type_of(y));
+}
+```
