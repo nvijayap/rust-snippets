@@ -252,3 +252,42 @@ fn main() {
     route_any_text(my_string);
 }
 ```
+
+### True Routing (Distinct Behavior for &str and String)
+
+```
+// 1. Define a routing trait
+trait TextRouter {
+    fn route(self);
+}
+
+// 2. Implement behavior for &str
+impl TextRouter for &str {
+    fn route(self) {
+        println!("Routed to the BORROWED (&str) handler: {}", self);
+    }
+}
+
+// 3. Implement behavior for String
+impl TextRouter for String {
+    fn route(self) {
+        println!("Routed to the OWNED (String) handler: {}", self);
+    }
+}
+
+// 4. Create the entry point function
+fn process_route<T: TextRouter>(param: T) {
+    param.route();
+}
+
+fn main() {
+    let borrowed: &str = "static_path";
+    let owned: String = String::from("dynamic_path");
+
+    // Executes &str logic
+    process_route(borrowed); 
+
+    // Executes String logic
+    process_route(owned);    
+}
+```
