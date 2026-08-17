@@ -308,3 +308,30 @@ fn main() {
     println!("Type of y: {}", type_of(y)); // yields f64
 }
 ```
+
+### 
+```
+use std::any::type_name;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
+
+fn main() {
+    let a = 21; // Integer
+    println!("{}", type_of(a)); // i32
+
+    let b = 2.5; // Float
+    println!("{}", type_of(b)); // f64
+    
+    let c = "hello";
+    println!("{}", type_of(c)); // &str
+
+    let d: String = "world".into();
+    println!("{}", type_of(d)); // alloc::string::String
+    
+    struct S;
+    let the_struct = S;
+    println!("{}", type_of(the_struct)); // ...::main::S
+}
+```
