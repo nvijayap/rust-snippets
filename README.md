@@ -179,3 +179,17 @@ fn main() {
     let _file = get_or_create_file("output.txt").unwrap();
 }
 ```
+
+### Concatenate strings
+```
+use std::error::Error;
+
+fn main() -> Result<(), Box<dyn Error>> {
+
+  let concatenated_string = format!("{} {} {}", "so", "be", "it");
+
+  println!("concatenated_string: {concatenated_string}");
+
+  Ok(())
+}
+```
