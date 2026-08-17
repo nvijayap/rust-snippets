@@ -763,4 +763,56 @@ fn main() {
 }
 ```
 
+## Using `Arc` - Real-World Code Example
+
+```
+use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
+
+// Shared configuration for our application
+struct AppConfig {
+    app_name: String,
+    timeout_seconds: u64,
+}
+
+fn main() {
+    // Wrap the config in an Arc so it can be safely shared across threads
+    let config = Arc::new(AppConfig {
+        app_name: String::from("FastServer"),
+        timeout_seconds: 5,
+    });
+
+    let mut handles = vec![];
+
+    // Spawn 3 worker threads
+    for i in 1..=3 {
+        // Clone the Arc pointer for this thread
+        // This increments the reference count atomically, not the underlying data
+        let config_clone = Arc::clone(&config);
+
+        let handle = thread::spawn(move || {
+            // Access shared data safely from the new thread
+            println!(
+                "Worker {} started for {}. Timeout is {}s.",
+                i, config_clone.app_name, config_clone.timeout_seconds
+            );
+            
+            thread::sleep(Duration::from_millis(100));
+            
+            println!("Worker {} finished.", i);
+        });
+
+        handles.push(handle);
+    }
+
+    // Wait for all worker threads to finish
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("All workers done. Program exiting.");
+}
+```
+
 ## .
