@@ -662,4 +662,21 @@ A move closure takes full ownership of variables it captures from outside,
 preventing dangling references if the parent function finishes before the spawned thread.
 ```
 
+## match handle.join
+
+```
+use std::thread;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        "Thread work completed!"
+    });
+
+    match handle.join() {
+        Ok(result) => println!("Success! Thread returned: {}", result),
+        Err(_) => println!("The spawned thread panicked!"),
+    }
+}
+```
+
 ## .
