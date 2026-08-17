@@ -353,3 +353,26 @@ fn main() {
     println!("Process finished with: {}", status);
 }
 ```
+
+## Without panicking, just show the error message
+
+### Using `match`
+
+```
+let res: Result<i32, &str> = Err("file not found");
+
+match res {
+    Ok(val) => println!("Success: {}", val),
+    Err(e) => println!("Error: {}", e), // Shows the err message safely
+}
+```
+
+### Using `if let`
+
+```
+let res: Result<i32, &str> = Err("bad input");
+
+if let Err(e) = res {
+    println!("Error: {}", e);
+}
+```
