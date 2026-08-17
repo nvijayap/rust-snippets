@@ -698,4 +698,69 @@ fn main() {
 }
 ```
 
+To overcome a value move in Rust, you can use borrowing (& or &mut), implement the Copy trait, explicitly clone the data, or use shared ownership smart pointers like Rc or Arc.
+
+## Borrowing with References
+
+Instead of transferring ownership, pass a reference so the original variable remains valid and usable.
+
+```
+fn print_text(s: &String) {
+    println!("{}", s);
+}
+
+fn main() {
+    let s1 = String::from("hello");
+    print_text(&s1); // Borrowing s1 instead of moving it
+    println!("{}", s1); // Still valid here!
+}
+```
+
+Behind the scenes in Rust, borrowing is a compile-time check with zero cost at runtime. The compiler uses a system called the borrow checker and lifetimes to track how long references are valid. This prevents data races and crashes before your code ever runs.
+
+## Implementing or using `copy`
+
+Types that have fixed size stored on the stack (like numbers) implement the Copy trait. Instead of moving, Rust automatically copies them. You can derive Copy for simple custom structs.
+
+```
+#[derive(Clone, Copy)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p1 = Point { x: 1, y: 2 };
+    let p2 = p1; // Copied, not moved!
+    println!("p1 is still valid: {}", p1.x);
+}
+```
+
+## Cloning the data
+
+If you need absolute ownership of a new variable and cannot share references, create a complete duplicate using .clone().
+
+```
+fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1.clone(); // Deep copy of the heap data
+    println!("s1: {}, s2: {}", s1, s2); // Both are valid
+}
+```
+
+## Shared ownership (Rc/Arc)
+
+When multiple parts of your program need joint ownership of data, wrap it in a Reference Counted smart pointer (Rc for single-threaded, Arc for multi-threaded).
+
+```
+use std::rc::Rc;
+
+fn main() {
+    let s1 = Rc::new(String::from("hello"));
+    let s2 = Rc::clone(&s1); // Increments reference count
+    
+    println!("Strong count: {}", Rc::strong_count(&s1));
+}
+```
+
 ## .
