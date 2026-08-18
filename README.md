@@ -947,6 +947,20 @@ fn main() {
 
 ## RAM - Total, Used
 
+`Cargo.toml`
+
+```
+[package]
+name = "ram"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+sysinfo = "0.39.6"
+```
+
+`src/main.rs`
+
 ```
 use sysinfo::System;
 
