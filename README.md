@@ -901,6 +901,22 @@ fn main() {
 
 ## Interacting with K8s (Kubernetes), Test with `minikube`
 
+`Cargo.toml`
+
+```
+[package]
+name = "mk"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+k8s-openapi = { version = "0.28.0", features = ["v1_36"] }
+kube = "4.2.0"
+tokio = { version = "1.53.1", features = ["full"] }
+```
+
+`src/main.rs`
+
 ```
 use kube::{Client, Api};
 use k8s_openapi::api::core::v1::Pod;
