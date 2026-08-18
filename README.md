@@ -899,4 +899,27 @@ fn main() {
 }
 ```
 
+## Interacting with K8s (Kubernetes)
+
+```
+use kube::{Client, Api};
+use k8s_openapi::api::core::v1::Pod;
+
+#[tokio::main]
+async fn main() -> Result<(), kube::Error> {
+    // Initialize the Kubernetes client from the default ~/.kube/config (Minikube context)
+    let client = Client::try_default().await?;
+
+    // Define an API accessor for Pods in the "default" namespace
+    let pods: Api<Pod> = Api::namespaced(client, "default");
+
+    // List the pods currently running in Minikube
+    for p in pods.list(&Default::default()).await? {
+        println!("Pod Name: {}", p.metadata.name.unwrap_or_default());
+    }
+
+    Ok(())
+}
+```
+
 ## .
