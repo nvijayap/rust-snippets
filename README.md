@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
   // writes a string to stdout
   println!("hello, rust universe!");
 
-  // writes as string to stderr
+  // writes a string to stderr
   eprintln!("damn, encountered an error!");
 
   // writes a string to a file
@@ -39,6 +39,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
   // indicates success
   Ok(())
 }
+```
+
+## Exercise above
+
+```
+Save above into a file called main.rs
+
+$ touch foo.txt; rustc main.rs && ./main # no error message
+
+$ rm -f foo.txt; rustc main.rs && ./main # shows error message
 ```
 
 ## Capturing Environment Variable
