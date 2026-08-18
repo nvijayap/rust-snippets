@@ -945,4 +945,29 @@ fn main() {
 }
 ```
 
+## RAM - Total, Used
+
+```
+use sysinfo::System;
+
+fn main() {
+    // Create and load system information
+    let mut sys = System::new_all();
+
+    // Refresh memory components
+    sys.refresh_memory();
+
+    // Get total and used memory in bytes
+    let total_ram = sys.total_memory();
+    let used_ram = sys.used_memory();
+
+    println!("Total RAM: {} bytes", total_ram);
+    println!("Used RAM: {} bytes", used_ram);
+    
+    // Convert bytes to gigabytes (GB)
+    let gb = 1024 * 1024 * 1024;
+    println!("Total RAM: {} GB", total_ram / gb);
+}
+```
+
 ## .
