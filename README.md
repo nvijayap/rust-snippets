@@ -899,7 +899,7 @@ fn main() {
 }
 ```
 
-## Interacting with K8s (Kubernetes)
+## Interacting with K8s (Kubernetes), Test with `minikube`
 
 ```
 use kube::{Client, Api};
@@ -919,6 +919,15 @@ async fn main() -> Result<(), kube::Error> {
     }
 
     Ok(())
+}
+```
+
+## Number of Logical CPUs
+
+```
+fn main() {
+    let cpus = num_cpus::get();
+    println!("cpus: {cpus}");
 }
 ```
 
