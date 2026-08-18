@@ -924,6 +924,20 @@ async fn main() -> Result<(), kube::Error> {
 
 ## Number of Logical CPUs
 
+`Cargo.toml`
+
+```
+[package]
+name = "lcpus"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+num_cpus = "1.17.0"
+```
+
+`src/main.rs`
+
 ```
 fn main() {
     let cpus = num_cpus::get();
